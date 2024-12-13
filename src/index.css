@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    height: 100%;
+    background-color: #080B1A;
+  }
+
+  body {
+    min-height: 100vh;
+    height: 100%;
+    overflow-x: hidden !important;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: transparent;
+    position: relative;
+    z-index: 0;
+  }
+
+  :root {
+    --glass-reflex: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    ),
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    )
+  }
+
+  .dark {
+    --glass-reflex: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 50%
+    )
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply relative overflow-hidden backdrop-blur-2xl;
+    background-image: var(--glass-reflex);
+    background-size: 200% 200%, 100% 100%;
+    background-position: 0% 0%, 0% 0%;
+    animation: glass-panel-shine 15s linear infinite;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 0 32px rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-panel::before {
+    content: '';
+    @apply absolute inset-0 opacity-40;
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    animation: glass-panel-shimmer 3s ease-in-out infinite;
+  }
+
+  .glass-panel::after {
+    content: '';
+    @apply absolute inset-0 opacity-10;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.2) 0%,
+      transparent 70%
+    )
+  }
+
+  .gradient-border {
+    position: relative;
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    box-shadow: 0 0 20px theme(colors.primary.DEFAULT / 30%);
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    background: linear-gradient(
+      45deg,
+      theme(colors.primary.DEFAULT),
+      theme(colors.secondary.DEFAULT),
+      theme(colors.primary.DEFAULT)
+    );
+    background-size: 200% 200%;
+    animation: gradient-border-shine 3s linear infinite;
+    border-radius: inherit;
+    filter: blur(4px);
+  }
+  .neon-border {
+    @apply relative;
+    box-shadow: 0 0 30px theme(colors.primary.DEFAULT / 20%);
+  }
+
+  .neon-border::before {
+    content: '';
+    @apply absolute -inset-px rounded-xl opacity-0 transition-all duration-500;
+    background: linear-gradient(
+      45deg,
+      theme(colors.primary.DEFAULT),
+      theme(colors.secondary.DEFAULT)
+    );
+    filter: blur(12px);
+  }
+
+  .neon-border:hover::before {
+    @apply opacity-100;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300;
+    box-shadow: 0 4px 20px theme(colors.primary.DEFAULT / 10%);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 20px 40px -10px theme(colors.primary.DEFAULT / 30%),
+      0 0 20px theme(colors.primary.DEFAULT / 20%);
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 
+      0 0 10px currentColor,
+      0 0 20px theme(colors.primary.DEFAULT / 60%),
+      0 0 30px theme(colors.primary.DEFAULT / 30%),
+      0 0 40px theme(colors.primary.DEFAULT / 15%);
+  }
+
+  .bg-mesh {
+    background-image: radial-gradient(
+      circle at center,
+      theme(colors.primary.DEFAULT / 8%) 0%,
+      transparent 70%
+    );
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+    animation: mesh-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes glass-panel-shine {
+    0% { background-position: 0% 0%, 0% 0%; }
+    50% { background-position: 200% 0%, 0% 0%; }
+    100% { background-position: 0% 0%, 0% 0%; }
+  }
+
+  @keyframes glass-panel-shimmer {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @keyframes gradient-border-shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes mesh-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.7; }
+  }
+}
